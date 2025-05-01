@@ -9,10 +9,17 @@ export type IdProp = {
 
 
 export type Props = {
-    params: {
-      id: string
-    }
-  }
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+
+// export type Props = {
+//     params: {
+//       id: string
+//     }
+//   }
 
 
 export type NewTarea = Pick<Tareas, "date" | "content">;

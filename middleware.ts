@@ -6,9 +6,7 @@ import { jwtVerify } from 'jose'; // Usamos jose
 const SECRET_KEY = process.env.SECRET_JWT_SEED;
 
 export async function middleware(request: NextRequest) {
-  console.log("entroooooooooooo")
   const token = request.cookies.get('token')?.value;
-  console.log("token", token)
 
   if (!token) {
     return NextResponse.redirect(new URL('/', request.url));

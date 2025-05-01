@@ -2,10 +2,11 @@ import { NextResponse, NextRequest  } from "next/server";
 import { conn } from "@/libs/mysql";
 import { Tareas } from "@/interface/interface";
 import { NewTarea } from "@/type/types";
-export async function GET(request: NextRequest, context: { params: { id: string } }){
+export async function GET(request: NextRequest,   context: { params: Promise<{ id: string }> } ){
     try {
-        const { params } = context;
-        const { id } =  params;
+        // const { params } = params;
+        const { id } = await context.params;
+        // const { id } =   params;
         const sql = `SELECT * FROM tarea WHERE id_user = ?`;
 
         
@@ -21,10 +22,11 @@ export async function GET(request: NextRequest, context: { params: { id: string 
     }
 }
 
-export async function POST(req: Request, context: { params: { id: string } }){
+export async function POST(req: Request,  context: { params: Promise<{ id: string }> } ){
     try {
-        const { params } = context;
-        const { id } =  params;
+        // const { params } = context;
+        // const { id } = await params;
+        const { id } = await context.params;
         const body: NewTarea = await req.json()
         const { date, content } = body;
         const sql = 'INSERT INTO tarea (date, content, id_user) VALUES (?,?,?)'
@@ -41,12 +43,12 @@ export async function POST(req: Request, context: { params: { id: string } }){
     }
 }
 
-export async function PUT(req: Request, context: {params:{id:string}}){
+export async function PUT(req: Request,  context: { params: Promise<{ id: string }> } ){
     try {
 
-        const {params} = context;
+        // const {params} = context;
 
-        const {id} =  params
+        const {id} = await context.params
 
         const body = await req.json();
 
@@ -70,11 +72,11 @@ export async function PUT(req: Request, context: {params:{id:string}}){
     }
 }
 
-export async function DELETE(req: Request, context:{params:{id:string}}) {
+export async function DELETE(req: Request,  context: { params: Promise<{ id: string }> } ) {
     try {
        
-        const { params } = context;
-        const { id } =  params;
+        // const { params } = context;
+        const { id } = await context.params;
 
         const sql = 'DELETE FROM tarea WHERE idtarea = ?'
 
