@@ -5,7 +5,7 @@ import { NewTarea } from "@/type/types";
 export async function GET(request: NextRequest, context: { params: { id: string } }){
     try {
         const { params } = context;
-        const { id } = await params;
+        const { id } =  params;
         const sql = `SELECT * FROM tarea WHERE id_user = ?`;
 
         
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest, context: { params: { id: string 
 export async function POST(req: Request, context: { params: { id: string } }){
     try {
         const { params } = context;
-        const { id } = await params;
+        const { id } =  params;
         const body: NewTarea = await req.json()
         const { date, content } = body;
         const sql = 'INSERT INTO tarea (date, content, id_user) VALUES (?,?,?)'
@@ -46,7 +46,7 @@ export async function PUT(req: Request, context: {params:{id:string}}){
 
         const {params} = context;
 
-        const {id} = await params
+        const {id} =  params
 
         const body = await req.json();
 
@@ -74,7 +74,7 @@ export async function DELETE(req: Request, context:{params:{id:string}}) {
     try {
        
         const { params } = context;
-        const { id } = await params;
+        const { id } =  params;
 
         const sql = 'DELETE FROM tarea WHERE idtarea = ?'
 
