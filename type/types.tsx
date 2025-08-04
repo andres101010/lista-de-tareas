@@ -15,11 +15,4 @@ export type Props = {
 };
 
 
-// export type Props = {
-//     params: {
-//       id: string
-//     }
-//   }
-
-
-export type NewTarea = Pick<Tareas, "date" | "content">;
+export type NewTarea = Pick<Tareas, "date" | "content" | "link">;

@@ -24,13 +24,11 @@ export async function GET(request: NextRequest,   context: { params: Promise<{ i
 
 export async function POST(req: Request,  context: { params: Promise<{ id: string }> } ){
     try {
-        // const { params } = context;
-        // const { id } = await params;
         const { id } = await context.params;
         const body: NewTarea = await req.json()
-        const { date, content } = body;
-        const sql = 'INSERT INTO tarea (date, content, id_user) VALUES (?,?,?)'
-        await conn.query(sql,[date, content, id])
+        const { date, content, link } = body;
+        const sql = 'INSERT INTO tarea (date, content, link, id_user) VALUES (?,?,?,?)'
+        await conn.query(sql,[date, content, link, id])
         await conn.end()
         
 
@@ -39,7 +37,10 @@ export async function POST(req: Request,  context: { params: Promise<{ id: strin
         console.log("error", error)
         await conn.end()
        
-        return NextResponse.json({message:"Error", error})
+        return NextResponse.json(
+            { message: "Error", error },
+            { status: 500 }
+        );
     }
 }
 

@@ -14,6 +14,7 @@ export interface Tareas {
     idtarea: number,
     date: string,
     content: string,
+    link: string,
     id_user: number,
     status: string,
     created_at: string | number,

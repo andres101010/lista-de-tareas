@@ -36,6 +36,7 @@ const Tasks = ({id}: IdProp) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
+
   return (
     <div>
       <div className="flex items-center justify-center mb-2">
@@ -43,7 +44,7 @@ const Tasks = ({id}: IdProp) => {
       </div>
         {
             !showInputTask ? 
-            <InputTasks handleShowInputTask={handleShowInputTask} id={id} setShowInputTask={setShowInputTask}/>
+            <InputTasks handleShowInputTask={handleShowInputTask} id={id} setShowInputTask={setShowInputTask} getDataTasks={getDataTasks}/>
             :
             <>
             <div className="mb-3.5">

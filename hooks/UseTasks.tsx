@@ -3,7 +3,7 @@ import { Tareas } from '@/interface/interface';
 import { editTask } from '@/services/tasks';
 const UseTasks = () => {
     const [tasks, setTasks] = useState<Tareas[]>([])
-    const [valueTask, setValueTask] = useState({date:"", content:""});
+    const [valueTask, setValueTask] = useState({date:"", content:"", link: ""});
     const [showInputTask, setShowInputTask] = useState(true)
 
     const handleShowInputTask = () => {
@@ -14,14 +14,6 @@ const UseTasks = () => {
         const {name, value} = e.target
         setValueTask(prev => ({...prev, [name]: value}))
     }
-
-    // const handleStatusChange = (id: number) => {
-    //   setTasks(prevTasks =>
-    //     prevTasks.map(task =>
-    //       task.idtarea === id ? { ...task, status: task.status === 'pendiente' ? 'completada' : 'pendiente' } : task
-    //     )
-    //   );
-    // };
 
     const handleStatusChange = async (id: number) => {
       setTasks(prevTasks => {

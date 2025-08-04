@@ -13,7 +13,8 @@ CREATE TABLE `user` (
 CREATE TABLE `tarea` (
   `idtarea` int NOT NULL AUTO_INCREMENT,
   `date` varchar(45) NOT NULL,
-  `content` varchar(45) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
   `id_user` int NOT NULL,
   `status` enum('pendiente','en_progreso','completada') NOT NULL DEFAULT 'pendiente',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
