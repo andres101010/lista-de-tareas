@@ -2,6 +2,8 @@ import { NextResponse, NextRequest  } from "next/server";
 import { conn } from "@/libs/mysql";
 import { Tareas } from "@/interface/interface";
 import { NewTarea } from "@/type/types";
+import { ResultSetHeader, FieldPacket } from 'mysql2';
+
 export async function GET(request: NextRequest,   context: { params: Promise<{ id: string }> } ){
     try {
         // const { params } = params;
@@ -44,32 +46,60 @@ export async function POST(req: Request,  context: { params: Promise<{ id: strin
     }
 }
 
-export async function PUT(req: Request,  context: { params: Promise<{ id: string }> } ){
+export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
+  
     try {
-
-        // const {params} = context;
-
-        const {id} = await context.params
-
+        const { id } = await context.params;
         const body = await req.json();
 
-        console.log("body", body)
+        // Validar que haya al menos 1 campo a actualizar
+        if (!Object.keys(body).length) {
+            return NextResponse.json({ message: "No hay campos para actualizar" }, { status: 400 });
+        }
 
-        const sql = 'UPDATE tarea SET date = ?, content = ?, status = ? WHERE idtarea = ?';
-        const values = [body.date, body.content, body.status, id]
+        // Lista de campos válidos para evitar SQL injection
+        const camposValidos = ["date", "content", "status", "link"];
+        const setParts: string[] = [];
+        const values: (string | number)[] = [];
 
-        const response = await conn.query(sql, values)
+
+        // Construir dinámicamente el SET
+        for (const campo of camposValidos) {
+            if (body[campo] !== undefined) {
+                setParts.push(`${campo} = ?`);
+                values.push(body[campo]);
+            }
+        }
+
+        // Si no hay campos válidos, salir
+        if (setParts.length === 0) {
+            return NextResponse.json({ message: "No hay campos válidos para actualizar" }, { status: 400 });
+        }
+
+        // Agregar el id al final para el WHERE
+        values.push(id);
+
+        // Construir SQL
+        const sql = `UPDATE tarea SET ${setParts.join(", ")} WHERE idtarea = ?`;
+
+        const [result] = await conn.query<[ResultSetHeader, FieldPacket[]]>(sql, values);
+
+
+        if (result.affectedRows === 0) {
+            return NextResponse.json({ message: "No se encontró la tarea" }, { status: 404 });
+        }
+
         await conn.end()
-        
+        return NextResponse.json({ message: "Editado con éxito" });
 
-        return NextResponse.json({message:"Editado Con Exito !!!", response})
-        
+
     } catch (error) {
-        console.log("error", error)
+        console.error("error", error);
         await conn.end()
-        
-
-        return NextResponse.json({message:"Algo Salio mal :("}, {status:500})
+        return NextResponse.json({ message: "Algo salió mal :(" }, { status: 500 });
+    } finally {
+        await conn.end()
+         
     }
 }
 
